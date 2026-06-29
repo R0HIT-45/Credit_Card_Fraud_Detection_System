@@ -141,7 +141,3 @@ This project was developed as part of a two-month AICTE Artificial Intelligence 
 FraudSense AI is a production-quality enhancement of a credit card fraud detection system developed during the internship. The original machine learning pipeline was extended with a redesigned enterprise interface, modular architecture, explainable predictions, responsive user experience, and comprehensive open-source documentation.
 
 ---
-
-## License
-
-This project is licensed under the [MIT License](./LICENSE).
