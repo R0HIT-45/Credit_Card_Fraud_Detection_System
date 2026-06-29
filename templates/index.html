@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FraudSense AI - Enterprise Credit Card Fraud Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="brand-title">FraudSense AI</h1>
+      <p class="brand-subtitle">Enterprise Credit Card Fraud Detection</p>
+      <div class="model-badge">Random Forest + XGBoost</div>
+    </header>
+
+    <div class="centered-layout">
+      <!-- Preset Cards Section -->
+      <section class="preset-section">
+        <h2 class="section-title">Preset Transactions</h2>
+        <div class="preset-cards">
+          
+          <button type="button" class="preset-card" data-preset="upi">
+            <div class="preset-card-header">
+              <span class="preset-name">UPI Payment</span>
+              <span class="preset-amount">₹250</span>
+            </div>
+            <div class="preset-details">
+              <span>Mobile</span> • <span>India</span> • <span>OTP Verified</span>
+            </div>
+            <div class="preset-action">[ Use ]</div>
+          </button>
+
+          <button type="button" class="preset-card" data-preset="atm">
+            <div class="preset-card-header">
+              <span class="preset-name">ATM Withdrawal</span>
+              <span class="preset-amount">₹10,000</span>
+            </div>
+            <div class="preset-details">
+              <span>ATM</span> • <span>PIN Verified</span>
+            </div>
+            <div class="preset-action">[ Use ]</div>
+          </button>
+
+          <button type="button" class="preset-card" data-preset="shopping">
+            <div class="preset-card-header">
+              <span class="preset-name">Online Shopping</span>
+              <span class="preset-amount">₹3,500</span>
+            </div>
+            <div class="preset-details">
+              <span>Credit Card</span> • <span>Chrome</span>
+            </div>
+            <div class="preset-action">[ Use ]</div>
+          </button>
+
+          <button type="button" class="preset-card danger" data-preset="international">
+            <div class="preset-card-header">
+              <span class="preset-name">International Purchase</span>
+              <span class="preset-amount">₹1,20,000</span>
+            </div>
+            <div class="preset-details">
+              <span>Foreign IP</span> • <span>VPN Detected</span>
+            </div>
+            <div class="preset-action">[ Use ]</div>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Form Section -->
+      <section class="form-section">
+        <h2 class="section-title">Transaction Details</h2>
+        <form id="scoring-form" onsubmit="return false;">
+          
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" for="amount">Transaction Amount (₹)</label>
+              <input type="number" id="amount" class="form-input" placeholder="e.g. 25000" step="0.01" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="time">Transaction Time Offset (s)</label>
+              <input type="number" id="time" class="form-input" placeholder="e.g. 3600" step="1" min="0" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="duration">Transaction Duration (s)</label>
+              <input type="number" id="duration" class="form-input" placeholder="e.g. 45" step="1" min="0" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="payment-method">Payment Method</label>
+              <select id="payment-method" class="form-select">
+                <option value="Credit Card">Credit Card</option>
+                <option value="Debit Card">Debit Card</option>
+                <option value="UPI">UPI</option>
+                <option value="Net Banking">Net Banking</option>
+                <option value="ATM">ATM Withdrawal</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="merchant">Merchant Category</label>
+              <select id="merchant" class="form-select">
+                <option value="Grocery">Grocery</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fuel">Fuel</option>
+                <option value="Travel">Travel</option>
+                <option value="Restaurant">Restaurant</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="device">Device Type</label>
+              <select id="device" class="form-select">
+                <option value="Mobile">Mobile</option>
+                <option value="Desktop">Desktop</option>
+                <option value="POS">POS Terminal</option>
+                <option value="ATM">ATM Machine</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="country">Country</label>
+              <input type="text" id="country" class="form-input" placeholder="e.g. India" value="India" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="international">International Transaction?</label>
+              <select id="international" class="form-select">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="otp">OTP Verified?</label>
+              <select id="otp" class="form-select">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pin">PIN Verified?</label>
+              <select id="pin" class="form-select">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+                <option value="Not Required">Not Required</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="vpn">VPN/Proxy Detected?</label>
+              <select id="vpn" class="form-select">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="new-device">New Device?</label>
+              <select id="new-device" class="form-select">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Hidden Advanced PCA Configuration -->
+          <details class="advanced-features">
+            <summary>Advanced AI Configuration ▼</summary>
+            <div style="margin-top: 16px; color: var(--text-muted); font-size: 14px;">
+              The model is trained on PCA-transformed features (V1-V28). These are hidden by default as they are not human-readable.
+            </div>
+            <div class="pca-grid" id="pca-grid-container">
+              <!-- Rendered via JS -->
+            </div>
+          </details>
+
+          <button type="button" class="btn-primary" id="analyze-btn">Analyze Transaction</button>
+        </form>
+      </section>
+
+      <!-- Loading / Error states -->
+      <div id="loading-overlay" class="loading-overlay" style="display:none;">
+        <div class="spinner"></div>
+        <p>Analyzing transaction...</p>
+      </div>
+      <div id="error-alert-card" class="error-card" style="display:none;">
+        <p id="error-message-text"></p>
+        <button id="error-retry-btn" class="preset-btn" style="margin-top: 16px;">Retry</button>
+      </div>
+
+      <!-- RESULTS SECTION -->
+      <section class="result-section" id="result-panel" style="display:none;">
+        <div class="result-header">
+          <h2 class="section-title" style="border:none; margin:0; text-align:center;">FRAUD DETECTION RESULT</h2>
+        </div>
+
+        <div class="verdict-display">
+          <div class="verdict-text" id="verdict-text">LEGITIMATE</div>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Confidence</div>
+            <div class="kpi-val" id="conf-pct">0.0%</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Risk Level</div>
+            <div class="kpi-val" id="risk-display">LOW</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Fraud Probability</div>
+            <div class="kpi-val" id="fraud-prob">0.0%</div>
+          </div>
+        </div>
+
+        <div class="explanation-box">
+          <h3 class="explain-title">AI Explanation</h3>
+          <ul id="explain-list" class="explain-list">
+            <!-- Rendered via JS -->
+          </ul>
+        </div>
+
+        <details class="model-details">
+          <summary>Model Details ▼</summary>
+          <div class="models-grid" id="models-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </details>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="/static/js/animations.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
